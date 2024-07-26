@@ -1,4 +1,5 @@
 steps:
+  # Fetch the OpenAI API key from Secret Manager
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
@@ -52,4 +53,5 @@ images:
   - 'gcr.io/$PROJECT_ID/aixbot'
 
 options:
+  logging: CLOUD_LOGGING_ONLY
   dynamic_substitutions: true
