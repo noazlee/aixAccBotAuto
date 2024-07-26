@@ -10,6 +10,8 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
  
+with open('/workspace/openai_key.txt', 'r') as f:
+    os.environ['OPENAI_API_KEY'] = f.read().strip()
 openai = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) 
 
 def remove_newlines(series): 
