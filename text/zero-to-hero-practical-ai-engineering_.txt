@@ -1,0 +1,172 @@
+Zero-to-Hero: Practical AI Engineering – AIX Academy
+Online Learning | 3 Weeks | 6 Sessions
+Zero-to-Hero:
+Practical AI Engineering
+Kick-start your journey into the world of AI engineering with our introductory track.
+Apply Now
+Companies Our Grads Have Worked With
+What You’ll Learn
+What You’ll Gain
+Course Features
+Course Syllabus
+Application
+Course Schedule
+FAQs
+What you will learn in Zero-to-Hero: Practical AI Engineering
+This 3 weeks intensive course is designed to equip you with practical skills and tools needed to engineer and deploy artificial intelligence solutions. You’ll learn through a combination of theoretical lessons and hands-on projects, covering the latest advancements in AI, from large language models to multi-modal applications. This track emphasizes practical implementation and real-world applications of AI technologies.
+Develop proficiency in Python programming.
+Understand data structures and algorithms.
+Grasp core software engineering practices for version control.
+Master data analysis and manipulation techniques using Pandas and NumPy.
+Gain an introduction to data engineering concepts for data preparation.
+Learn basic SQL for interacting with databases.
+Be introduced to fundamental machine learning concepts, supervised and unsupervised learning, and model evaluation.
+What You’ll Gain
+Ability to build and deploy scalabel AI model
+Proficiency in multiple AI and machine learning tools and frameworks.
+Network with like-minded individuals, collaborate on projects and gain valuable insights into the ever-evolving world of AI engineering.
+Portfolio of projects demonstrating proficiency in AI development.
+Career transformation in the form of gaining the knowledge and skills to impact real-world challenges, whether first joining as a novice or seasoned professional.
+Course Features
+Private Discord community access.
+Certificate of completion upon finishing the program.
+Interactive live sessions.
+Practical projects and assignments.
+Lifetime access to course material and resources.
+Professional networking.
+Real-world projects & demo day.
+Course Syllabus
+Session 1
+Foundations of AI and Large Language Models (LLMs)
+Build your understanding on GPTs, LLMs and build your very own AI Chatbot.
+Session 2
+Prompt Engineering and Retrieval-Augmented Generation (RAG)
+Craft effective prompts, understandin retrieval and generation synergy, and enhance AI with vector databases, culminating in practical RAG system integration for accurate, contextual responses.
+Session 3
+Function Calling and Code Generation
+Leverage GPT-4 for code generation, implementing function calls, and task-performing capabilities.
+Session 4
+Vision and Audio
+Integrate vision, audio, image generation with DALL-E, and speech-to-text with Whisper.
+Session 5
+Advanced AI Engineering
+Customize LLMs, enhance training with quantization, develop AI agents and scale AI solutions.
+Session 6
+Demo Day
+Showcase projects, engage in interactive Q&A with experts, and explore networking opportunities.
+Graduate Testimonials
+Noah Lee,
+our newest AIX Academy Graduate
+I am really glad I did the course as it introduced me to the basics of AI and how to use LLMs in practical settings. I was able to test out my own chat bot using new techniques and am able to follow new developments in AI a lot more clearly after the bootcamp. It was also a cool and a low time commitment. Considering the emphasis so many businesses are placing in AI and LLMs, I would definitely recommend taking the bootcamp.
+Jeyshalini Tevosha,
+Data & AI Consultant at GradientX
+I am very pleased with the course as it introduced me to the basics of AI and practical uses of LLMs. The bootcamp allowed me to create my own chatbot and stay updated with the latest AI developments. It’s a great course for anyone looking to understand AI better and apply it in real-world scenarios.
+Application Process
+3 Simple Steps
+Apply Online
+Begin your application by filling out our online form. Provide basic information about your background and your motivation for joining the AI Engineering Bootcamp.
+Complete AI Readiness Quiz
+Take our brief, engaging AI Readiness Quiz.
+This quiz is designed to:
+Gauge your current understanding of AI concepts.
+Assess your problem-solving skills.
+Help you identify areas for growth
+Don’t worry if you’re new to AI – this quiz is meant to establish a baseline and help us tailor the bootcamp experience.
+Await Your Results
+Our team will review your application and quiz results.
+Successful candidates will receive an admission offer and next steps to secure their spot in the upcoming bootcamp cohort.
+At AIX Academy, we believe in equal opportunity and potential. Our streamlined process is designed to identify motivated individuals ready to transform their careers, regardless of their current AI knowledge level.
+Apply Now
+Application Process
+3 Simple Steps
+Apply Online
+Preparatory Learning
+Await Your Results
+Apply Now
+Course Schedule
+Next Upcoming Cohort
+COST
+RM 4,000
+COURSE CODE
+ZTH:PAIE
+DATES
+20 Aug – 3 Sep, 2024
+APPLICATION DEADLINE
+19 Aug, 2024
+COST
+RM 4,000
+COURSE CODE
+ZTH:PAIE
+DATES
+20 Aug – 3 Sep, 2024
+APPLICATION DEADLINE
+19 Aug, 2024
+Apply Now
+Waiting List
+Can’t find your preferred timing?
+Join our waiting list to receive updates on new intake dates.
+Join the AIX Waiting List
+Frequently Asked Questions
+What is the refund policy?
+Partial refunds are available for the first half of the bootcamp. Refund amount is calculated based on the number of days attended, minus a non-refundable commitment fee.
+No refunds are offered after the 50% mark of the bootcamp duration.
+To request a refund, please email us at
+hello@aixacademy.com
+.
+What can I do at the end of the program?
+By the end of the Zero-to-Hero: Practical AI Engineering program, you’ll be equipped to build and deploy sophisticated AI models and applications.
+For example, at the end of the program, you will be able to develop AI chatbots with advanced capabilities, create and manipulate images using DALL-E, and integrate speech-to-text functionality into your projects.
+Additionally, you’ll have a portfolio of projects demonstrating your proficiency in practical AI development.
+Do I need prior experience in programming or AI?
+Our course is designed as a “Zero-to-Hero” program, making it accessible to beginners. While prior programming experience is helpful, it’s not mandatory. We start with Python fundamentals and progressively build up to advanced AI concepts.
+If you’re completely new to programming, we recommend dedicating extra time to the initial sessions to ensure a strong foundation.
+What are the job prospects after completing this course?
+The job market for AI engineers is booming, and our course prepares you for various roles:
+AI Engineer
+Developing AI-powered chat-bots for customer service.
+Machine Learning Engineer
+Data Scientist with AI specialization
+AI Applications Developer
+AI Research Associate
+AI Solutions Architect
+Many of our graduates have secured positions in top tech companies, while others have successfully integrated AI capabilities into their current roles, leading to promotions and new opportunities.
+Can I start my own AI-focused company after this course?
+Absolutely!
+Our course provides you with the technical skills and practical knowledge needed to build AI-powered solutions.
+Many of our alumni have gone on to start successful AI ventures.
+The course covers not just the technology, but also real-world applications and industry trends, giving you insights for potential business opportunities. Additionally, our networking sessions and demo day provide excellent platforms to connect with potential co-founders or investors.
+While starting a company requires additional business acumen, this course will give you the technical foundation and industry connections to take that entrepreneurial leap in the AI space.
+Menu
+Quick Links
+Contact
+Home
+About Us
+Contact Us
+Our Blogs
+Our Program
+AIX Academy by GradientX Sdn. Bhd. (202101021755)
+Address: Level 3A, Glo Damansara, 699 Jalan Damansara, 60000 Kuala Lumpur, Malaysia
+Contact: hello@aixacademy.com
+Connect with Us on Social Media.
+© Copyright AIX Academy by GradientX Sdn Bhd
+Terms & Conditions
+|
+Privacy Policy
+Menu
+Home
+About Us
+Contact Us
+Quick Links
+Our Blogs
+Our Program
+Contact
+AIX Academy by GradientX Sdn. Bhd. (
+202101021755
+)
+Address: Level 3A, Glo Damansara, 699 Jalan Damansara, 60000 Kuala Lumpur, Malaysia
+Contact:
+hello@aixacademy.com
+© Copyright AIX Academy by GradientX Sdn Bhd
+Terms & Conditions
+|
+Privacy Policy

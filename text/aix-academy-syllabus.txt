@@ -1,0 +1,95 @@
+Zero-to-Hero: Practical AI Engineering
+Duration: 3 Weeks
+No. of Session: 6 Sessions
+Learning Method: Online Learning
+Course Overview
+This course offers a fast-tracked introduction to Artificial Intelligence (AI) and Large
+Language Models (LLMs), focusing on practical implementation using tools like OpenAI APIs
+and Langchain. Over six sessions, participants will learn to integrate AI features into
+applications, covering text generation, function calling, image creation, and more. The
+course concludes with a demo day and an introduction to advanced AI topics, preparing
+students for further exploration and development in AI engineering.
+Prerequisites
+Participants should possess:
+• Basic programming knowledge.
+• No prior knowledge in AI, machine learning, or data science is required.
+Course Outline
+1. Foundations of AI and Large Language Models (LLMs)
+• Introduction to AI: Discover AI's transformative impact across various fields.
+• Understanding GPTs and LLMs: Explore the history, evolution, and mechanics of
+transformer and generative language models.
+• Creating Your First AI Chatbot: Get hands-on with the OpenAI API to develop a basic
+chatbot.
+• OpenAI APIs: Practical insights into API integration for dynamic applications.
+2. Prompt Engineering and Retrieval-Augmented Generation (RAG)
+• Prompt Engineering: Techniques to craft effective prompts for desired outcomes.
+• RAG Fundamentals: Understand the synergy between retrieval and generation.
+• Vector Databases & Embeddings: Learn how vector databases enhance AI by
+efficiently storing and retrieving high-dimensional embeddings, optimizing semantic
+search and LLM performance
+• Implementing RAG Systems: Step-by-step guide to integrating RAG into your
+chatbot for more accurate and contextual responses.
+3. Function Calling and Code Generation
+• Code Generation with GPT-4: Learn how to leverage on LLM to do code generation
+to augment programming tasks.
+• Enhancing Applications with Function Calling: Implementing function calls and tool
+use with practical examples.
+• Advanced Bot Capabilities: Develop a chatbot that can perform tasks like math and
+code generation.
+4. Vision and Audio
+• Multi-Modal Capabilities: Integrate vision and audio into your AI projects.
+• Image Generation with DALL-E: Create and manipulate images using DALL-E,
+exploring its potential in various applications.
+• Speech-to-Text with Whisper: Convert speech into text seamlessly and integrate
+this functionality into your applications.
+5. Advanced AI Engineering
+• Fine-Tuning Models: Customize LLMs for specific tasks and domains.
+• Quantization Techniques: Enhance model training efficiency through LoRA and
+QLoRA.
+• Building AI Agents: Develop autonomous AI systems using the techniques learned.
+• Evaluating AI Performance: Metrics and methodologies for robust evaluation.
+• Scaling AI Solutions: Strategies for deploying and scaling AI in production
+environments.
+6. Demo Day
+• Project Showcase
+• Interactive Q&A: Engage with experts from both industry and academia
+• Networking Opportunities: Discuss future collaborations and opportunities.
+What You Will Learn
+This 3 weeks intensive course is designed to equip you with practical skills and tools
+needed to engineer and deploy artificial intelligence solutions. You'll learn through a
+combination of theoretical lessons and hands-on projects, covering the latest
+advancements in AI, from large language models to multi-modal applications. This track
+emphasizes practical implementation and real-world applications of AI technologies.
+• Develop proficiency in working with Large Language Models (LLMs) and the OpenAI
+API.
+• Master prompt engineering techniques for optimal AI interactions.
+• Understand and implement Retrieval-Augmented Generation (RAG) for enhanced
+contextual responses.
+• Gain practical experience with vector databases and embeddings for efficient
+information retrieval.
+• Learn to leverage AI for code generation and function calling in applications.
+• Explore multi-modal AI capabilities, including image generation and speech-to-text
+conversion.
+• Be introduced to advanced AI engineering concepts like fine-tuning, quantization,
+and AI agents.
+• Understand strategies for evaluating and scaling AI solutions in production
+environments.
+What You Will Gain
+• Ability to build and deploy sophisticated AI models and applications.
+• Proficiency in cutting-edge AI tools and frameworks, including OpenAI's GPT
+models, DALL-E, and Whisper.
+• Network with like-minded individuals, collaborate on projects, and gain valuable
+insights into the rapidly evolving field of AI engineering.
+• Portfolio of projects demonstrating proficiency in practical AI development, from
+chatbots to multi-modal applications.
+• Career transformation by gaining the knowledge and skills to tackle real-world AI
+challenges, suitable for both newcomers and experienced professionals looking to
+upgrade their AI engineering capabilities.
+Target Audience
+• Aspiring developers interested in AI
+• Software engineers
+• AI Enthusiasts
+• Indie Hackers
+• Data Engineers
+• Data Analysts
+• Data Scientists
