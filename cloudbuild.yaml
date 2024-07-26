@@ -57,9 +57,3 @@ substitutions:
 
 options:
   dynamic_substitutions: true
-
-# Use secret manager to securely pass the OpenAI API key
-availableSecrets:
-  secretManager:
-    - versionName: projects/$PROJECT_ID/secrets/openai_api_key/versions/latest
-      env: '_OPENAI_API_KEY'
