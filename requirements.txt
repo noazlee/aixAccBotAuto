@@ -15,4 +15,7 @@ requests
 gunicorn
 nest_asyncio
 faiss-cpu
-selenium==4.1.0 
+selenium==4.1.0
+beautifulsoup4
+google-cloud-storage
+google-auth
