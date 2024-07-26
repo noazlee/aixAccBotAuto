@@ -14,7 +14,7 @@ steps:
     entrypoint: 'python'
     args: ['create_embeddings.py']
     env:
-      - 'OPENAI_API_KEY=${_OPENAI_API_KEY}'
+      - 'OPENAI_API_KEY=$_OPENAI_API_KEY'
 
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
