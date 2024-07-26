@@ -5,7 +5,6 @@ steps:
     - '-c'
     - |
       gcloud secrets versions access latest --secret=openai_api_key > /workspace/openai_key.txt
-    secretEnv: ['OPENAI_API_KEY']
 
   # Install dependencies
   - name: 'python:3.10'
@@ -47,13 +46,10 @@ steps:
       - 'us-central1'
       - '--allow-unauthenticated'
       - '--set-env-vars'
-      - 'OPENAI_API_KEY=/workspace/openai_key.txt'
+      - 'OPENAI_API_KEY_FILE=/workspace/openai_key.txt'
 
 images:
   - 'gcr.io/$PROJECT_ID/aixbot'
-
-substitutions:
-  _OPENAI_API_KEY: ${_OPENAI_API_KEY}
 
 options:
   dynamic_substitutions: true
