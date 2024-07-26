@@ -44,7 +44,7 @@ steps:
       - '--platform'
       - 'managed'
       - '--region'
-      - 'us-central1'
+      - 'asia-southeast1'
       - '--allow-unauthenticated'
       - '--set-env-vars'
       - 'OPENAI_API_KEY_FILE=/workspace/openai_key.txt'
