@@ -15,6 +15,8 @@ with open('./data/id_to_text.pkl', 'rb') as f:
     id_to_text = pickle.load(f)
 
 tokenizer = tiktoken.get_encoding("cl100k_base")
+with open('/workspace/openai_key.txt', 'r') as f:
+    os.environ['OPENAI_API_KEY'] = f.read().strip()
 openai = OpenAI(api_key=os.environ("OPENAI_API_KEY")) 
 
 def distances_from_embeddings(

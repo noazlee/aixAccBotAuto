@@ -17,6 +17,8 @@ import faiss
 app = Flask(__name__)
 CORS(app)
 
+with open('/workspace/openai_key.txt', 'r') as f:
+    os.environ['OPENAI_API_KEY'] = f.read().strip()
 openai.api_key = os.environ('OPENAI_API_KEY')
 
 # Get id_to_text and index
