@@ -17,9 +17,20 @@ import faiss
 app = Flask(__name__)
 CORS(app)
 
-with open('/workspace/openai_key.txt', 'r') as f:
-    os.environ['OPENAI_API_KEY'] = f.read().strip()
-openai.api_key = os.environ['OPENAI_API_KEY']
+# Set up logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+
+# Load OpenAI API key
+try:
+    with open('/workspace/openai_key.txt', 'r') as f:
+        os.environ['OPENAI_API_KEY'] = f.read().strip()
+    openai.api_key = os.environ['OPENAI_API_KEY']
+    logging.info("OpenAI API key loaded successfully")
+except Exception as e:
+    logging.error(f"Failed to load OpenAI API key: {str(e)}")
 
 # Get id_to_text and index
 index = faiss.read_index('/app/data/faiss_index.index')
@@ -77,37 +88,48 @@ def hello():
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    incoming_msg = request.json.get('message')
-    print("incoming message: ***")
-    print(incoming_msg)
-    if not incoming_msg:
-        return jsonify({"error": "No message provided"}), 400
+    try:
+        logging.info("Received chat request")
+        incoming_msg = request.json.get('message')
+        logging.info(f"Incoming message: {incoming_msg}")
+        
+        if not incoming_msg:
+            logging.warning("No message provided")
+            return jsonify({"error": "No message provided"}), 400
+        
+        if incoming_msg == 'GREETING':
+            logging.info("Responding with greeting")
+            return jsonify({"response": "Hello! I am AIX Bot, how can I assist you today?"}), 200
+        
+        if is_related_to_aix(incoming_msg):
+            logging.info("Message is related to AIX, generating answer")
+            retrieval_answer = get_answer(incoming_msg)
+            logging.info(f"Retrieved answer: {retrieval_answer}")
+            
+            messages.append({"role": "user", "content": incoming_msg})
+            messages.append({"role": "system", "content": f"Context: {retrieval_answer}"})
+            
+            logging.info("Sending request to OpenAI")
+            initial_response = openai.chat.completions.create(model="gpt-3.5-turbo",
+                                                            messages=messages)
+            
+            logging.info("Received response from OpenAI")
+            initial_response_message = initial_response.choices[0].message.content
+            logging.info(f"OpenAI response: {initial_response_message}")
+            
+            messages.append({"role": "assistant", "content": initial_response_message})
+            
+            return jsonify({"response": initial_response_message}), 200
+        else:
+            logging.warning("Message not related to AIX")
+            return jsonify({"error": "Message not related to AIX"}), 400
     
-    if incoming_msg == 'GREETING':
-        return jsonify({"response": "Hello! I am AIX Bot, how can I assist you today?"}), 200
-    
-    if is_related_to_aix(incoming_msg):
-        retrieval_answer = get_answer(incoming_msg)
-        messages.append({"role": "user", "content": incoming_msg})
-        messages.append({"role": "system", "content": f"Context: {retrieval_answer}"})
-        initial_response = openai.chat.completions.create(model="gpt-4o-mini",
-                                                        messages=messages)
-        print("initial response: ***")
-        print(initial_response.choices[0].message.content)
-        initial_response_message = initial_response.choices[0].message.content
-        messages.append({"role": "assistant", "content": initial_response_message})
-    # else:
-    #     messages.append({"role": "user", "content": incoming_msg})
-    #     initial_response = openai.chat.completions.create(model="gpt-4o-mini",
-    #                                                     messages=messages)
-    #     print("initial response: ***")
-    #     print(initial_response.choices[0].message.content)
-    #     initial_response_message = initial_response.choices[0].message.content
-    #     messages.append({"role": "assistant", "content": initial_response_message})
-
-    return jsonify({"response": initial_response_message}), 200
+    except Exception as e:
+        logging.error(f"An error occurred in chat function: {str(e)}")
+        return jsonify({"error": "An internal server error occurred"}), 500
 
 if __name__ == '__main__':
     nest_asyncio.apply()
     port = int(os.environ.get('PORT', 8080))
+    logging.info(f"Starting Flask app on port {port}")
     app.run(host='0.0.0.0', port=port)
