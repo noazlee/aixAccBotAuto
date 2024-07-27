@@ -8,22 +8,30 @@ steps:
       gcloud secrets versions access latest --secret=openai_api_key > /workspace/openai_key.txt
       echo "export OPENAI_API_KEY=$$(cat /workspace/openai_key.txt)" >> /workspace/env.sh
 
-  # Install Chrome, ChromeDriver, dependencies, and run scraping script
+  # Install dependencies and run scripts
   - name: 'python:3.10'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
+        # Install system dependencies
         apt-get update && apt-get install -y wget gnupg
         wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
         echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
         apt-get update && apt-get install -y google-chrome-stable
+
+        # Install ChromeDriver
         CHROME_VERSION=$$(google-chrome --version | cut -d " " -f3 | cut -d "." -f1-3)
         CHROMEDRIVER_VERSION=$$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$${CHROME_VERSION})
         wget https://chromedriver.storage.googleapis.com/$${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip
         unzip chromedriver_linux64.zip -d /usr/local/bin
         rm chromedriver_linux64.zip
+
+        # Install Python dependencies
+        pip install --upgrade pip
         pip install -r requirements.txt
+
+        # Debug information
         echo "Installed Python packages:"
         pip list
         echo "Chrome version:"
@@ -32,17 +40,12 @@ steps:
         chromedriver --version
         echo "System information:"
         uname -a
-        source /workspace/env.sh
-        python scrape_aix.py
 
-  # Run embedding creation script
-  - name: 'python:3.10'
-    entrypoint: 'bash'
-    args:
-    - '-c'
-    - |
-      source /workspace/env.sh
-      python create_embeddings.py
+        # Run scripts
+        source /workspace/env.sh
+        export BUCKET_NAME=aix-academy-chatbot-bucket
+        python scrape_aix.py
+        python create_embeddings.py
 
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
