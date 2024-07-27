@@ -51,7 +51,7 @@ while urls_to_scrape:
 
 # Initialize Google Cloud Storage client
 storage_client = storage.Client()
-bucket_name = 'your-bucket-name'  # Replace with your bucket name
+bucket_name = 'aix-academy-chatbot-bucket'  # Replace with your bucket name
 bucket = storage_client.bucket(bucket_name)
 
 # Function to save page content to a Cloud Storage bucket
