@@ -22,6 +22,7 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
+logging.info("Application starting...")
 
 # Load OpenAI API key
 try:
