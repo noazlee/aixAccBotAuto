@@ -46,11 +46,11 @@ steps:
 
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/aix-academy-chatbot/aixbot', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/aixbot', '.']
 
   # Push the image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/aix-academy-chatbot/aixbot']
+    args: ['push', 'gcr.io/$PROJECT_ID/aixbot']
 
   # Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -60,7 +60,7 @@ steps:
       - 'deploy'
       - 'aixbot'
       - '--image'
-      - 'gcr.io/aix-academy-chatbot/aixbot'
+      - 'gcr.io/$PROJECT_ID/aixbot'
       - '--platform'
       - 'managed'
       - '--region'
@@ -70,7 +70,7 @@ steps:
       - 'OPENAI_API_KEY_FILE=/workspace/openai_key.txt'
 
 images:
-  - 'gcr.io/aix-academy-chatbot/aixbot'
+  - 'gcr.io/$PROJECT_ID/aixbot'
 
 options:
   logging: CLOUD_LOGGING_ONLY

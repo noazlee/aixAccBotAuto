@@ -19,3 +19,4 @@ selenium
 beautifulsoup4
 google-cloud-storage
 google-auth
+webdriver-manager
