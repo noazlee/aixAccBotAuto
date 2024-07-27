@@ -6,7 +6,7 @@ steps:
     - '-c'
     - |
       gcloud secrets versions access latest --secret=openai_api_key > /workspace/openai_key.txt
-      echo "export OPENAI_API_KEY=$(cat /workspace/openai_key.txt)" >> /workspace/env.sh
+      echo "export OPENAI_API_KEY=$$(cat /workspace/openai_key.txt)" >> /workspace/env.sh
 
   # Install Chrome, ChromeDriver, dependencies, and run scraping script
   - name: 'python:3.10'
@@ -18,9 +18,9 @@ steps:
         wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
         echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
         apt-get update && apt-get install -y google-chrome-stable
-        CHROME_VERSION=$(google-chrome --version | cut -d " " -f3 | cut -d "." -f1-3)
-        CHROMEDRIVER_VERSION=$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION})
-        wget https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip
+        CHROME_VERSION=$$(google-chrome --version | cut -d " " -f3 | cut -d "." -f1-3)
+        CHROMEDRIVER_VERSION=$$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$${CHROME_VERSION})
+        wget https://chromedriver.storage.googleapis.com/$${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip
         unzip chromedriver_linux64.zip -d /usr/local/bin
         rm chromedriver_linux64.zip
         pip install -r requirements.txt
@@ -46,11 +46,11 @@ steps:
 
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/aix-academy-chatbot/aixbot', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/aixbot', '.']
 
   # Push the image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/aix-academy-chatbot/aixbot']
+    args: ['push', 'gcr.io/$PROJECT_ID/aixbot']
 
   # Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -60,7 +60,7 @@ steps:
       - 'deploy'
       - 'aixbot'
       - '--image'
-      - 'gcr.io/aix-academy-chatbot/aixbot'
+      - 'gcr.io/$PROJECT_ID/aixbot'
       - '--platform'
       - 'managed'
       - '--region'
@@ -70,7 +70,7 @@ steps:
       - 'OPENAI_API_KEY_FILE=/workspace/openai_key.txt'
 
 images:
-  - 'gcr.io/aix-academy-chatbot/aixbot'
+  - 'gcr.io/$PROJECT_ID/aixbot'
 
 options:
   logging: CLOUD_LOGGING_ONLY
