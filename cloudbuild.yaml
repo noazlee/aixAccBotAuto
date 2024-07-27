@@ -15,7 +15,7 @@ steps:
   # Run scraping script
   - name: 'python:3.10'
     entrypoint: 'python'
-    args: ['scrape_aixacademy.py']
+    args: ['scrape_aix.py']
 
   # Run embedding creation script
   - name: 'python:3.10'
