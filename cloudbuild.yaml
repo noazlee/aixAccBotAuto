@@ -1,4 +1,9 @@
 steps:
+
+# Install Chrome and ChromeDriver
+  - name: 'ubuntu'
+    args: ['bash', '-c', 'apt-get update && apt-get install -y wget gnupg && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list && apt-get update && apt-get install -y google-chrome-stable']
+    
   # Fetch the OpenAI API key from Secret Manager
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
