@@ -1,7 +1,10 @@
-# Ignore the following files and directories
-.git
+# Ignore everything in the root directory
 .env
-*.pyc
-__pycache__
+.git
+
+# Except the files we want to include
+!.dockerignore
+!Dockerfile
+!requirements.txt
 !data/faiss_index.index
 !data/id_to_text.pkl
