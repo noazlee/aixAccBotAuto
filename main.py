@@ -42,7 +42,8 @@ def get_secret(secret_name):
 # Load OpenAI API key
 try:
     openai_api_key = get_secret('openai_api_key')
-    client = OpenAI(api_key=openai_api_key)
+    os.environ['OPENAI_API_KEY'] = openai_api_key  # Set the environment variable
+    client = OpenAI()  # This will now use the environment variable
 except Exception as e:
     print(f"Error accessing secret: {str(e)}")
     raise
@@ -109,20 +110,28 @@ def chat():
             retrieval_answer = get_answer(incoming_msg)
             logging.info(f"Retrieved answer: {retrieval_answer}")
             
-            messages.append({"role": "user", "content": incoming_msg})
-            messages.append({"role": "system", "content": f"Context: {retrieval_answer}"})
+            current_messages = messages.copy()
+            current_messages.append({"role": "user", "content": incoming_msg})
+            current_messages.append({"role": "system", "content": f"Context: {retrieval_answer}"})
             
             logging.info("Sending request to OpenAI")
-            initial_response = openai.chat.completions.create(model="gpt-3.5-turbo",
-                                                            messages=messages)
-            
-            logging.info("Received response from OpenAI")
-            initial_response_message = initial_response.choices[0].message.content
-            logging.info(f"OpenAI response: {initial_response_message}")
-            
-            messages.append({"role": "assistant", "content": initial_response_message})
-            
-            return jsonify({"response": initial_response_message}), 200
+            try:
+                initial_response = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=current_messages
+                )
+                
+                logging.info("Received response from OpenAI")
+                initial_response_message = initial_response.choices[0].message.content
+                logging.info(f"OpenAI response: {initial_response_message}")
+                
+                return jsonify({"response": initial_response_message}), 200
+            except openai.APIError as e:
+                logging.error(f"OpenAI API error: {str(e)}")
+                return jsonify({"error": "Error communicating with AI service"}), 503
+            except Exception as e:
+                logging.error(f"Unexpected error in OpenAI request: {str(e)}")
+                return jsonify({"error": "An unexpected error occurred"}), 500
         else:
             logging.warning("Message not related to AIX")
             return jsonify({"error": "Message not related to AIX"}), 400
@@ -130,7 +139,6 @@ def chat():
     except Exception as e:
         logging.error(f"An error occurred in chat function: {str(e)}")
         return jsonify({"error": "An internal server error occurred"}), 500
-
 if __name__ == '__main__':
     nest_asyncio.apply()
     port = int(os.environ.get('PORT', 8080))
