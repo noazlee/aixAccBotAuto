@@ -13,7 +13,7 @@ from google.cloud import secretmanager
 # Function to get the secret from Google Cloud Secret Manager
 def get_secret(secret_name):
     client = secretmanager.SecretManagerServiceClient()
-    name = f"projects/YOUR_PROJECT_ID/secrets/{secret_name}/versions/latest"
+    name = f"projects/aix-academy-chatbot/secrets/{secret_name}/versions/latest"
     response = client.access_secret_version(request={"name": name})
     return response.payload.data.decode("UTF-8")
 
