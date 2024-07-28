@@ -30,29 +30,25 @@ logging.info("Application starting...")
 index = None
 id_to_text = None
 
-@app.before_first_request
-def initialize():
-    global index, id_to_text
-    
-    # Load OpenAI API key
-    try:
-        with open('/workspace/openai_key.txt', 'r') as f:
-            os.environ['OPENAI_API_KEY'] = f.read().strip()
-        openai.api_key = os.environ['OPENAI_API_KEY']
-        logging.info("OpenAI API key loaded successfully")
-    except Exception as e:
-        logging.error(f"Failed to load OpenAI API key: {str(e)}")
-        raise
+# Load OpenAI API key
+try:
+    with open('workspace/openai_key.txt', 'r') as f:
+        os.environ['OPENAI_API_KEY'] = f.read().strip()
+    openai.api_key = os.environ['OPENAI_API_KEY']
+    logging.info("OpenAI API key loaded successfully")
+except Exception as e:
+    logging.error(f"Failed to load OpenAI API key: {str(e)}")
+    raise
 
-    # Load FAISS index and id_to_text
-    try:
-        index = faiss.read_index('/app/data/faiss_index.index')
-        with open('/app/data/id_to_text.pkl', 'rb') as f:
-            id_to_text = pickle.load(f)
-        logging.info("FAISS index and id_to_text loaded successfully")
-    except Exception as e:
-        logging.error(f"Failed to load FAISS index or id_to_text: {str(e)}")
-        raise
+# Load FAISS index and id_to_text
+try:
+    index = faiss.read_index('data/faiss_index.index')
+    with open('data/id_to_text.pkl', 'rb') as f:
+        id_to_text = pickle.load(f)
+    logging.info("FAISS index and id_to_text loaded successfully")
+except Exception as e:
+    logging.error(f"Failed to load FAISS index or id_to_text: {str(e)}")
+    raise
 
 examples = [
     {"role": "user", "content": "What is AIX?"},

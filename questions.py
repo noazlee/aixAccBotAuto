@@ -11,12 +11,12 @@ import tiktoken
 
 
 # Get id_to_text and index
-index = faiss.read_index('/app/data/faiss_index.index')
-with open('/app/data/id_to_text.pkl', 'rb') as f:
+index = faiss.read_index('data/faiss_index.index')
+with open('data/id_to_text.pkl', 'rb') as f:
     id_to_text = pickle.load(f)
 
 tokenizer = tiktoken.get_encoding("cl100k_base")
-with open('/workspace/openai_key.txt', 'r') as f:
+with open('workspace/openai_key.txt', 'r') as f:
     os.environ['OPENAI_API_KEY'] = f.read().strip()
 openai.api_key = os.environ['OPENAI_API_KEY']
 

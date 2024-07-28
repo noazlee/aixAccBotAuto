@@ -8,7 +8,7 @@ import pickle
 from google.cloud import storage
 
 # Initialize OpenAI client
-with open('/workspace/openai_key.txt', 'r') as f:
+with open('workspace/openai_key.txt', 'r') as f:
     os.environ['OPENAI_API_KEY'] = f.read().strip()
 openai_client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
 
@@ -91,11 +91,11 @@ try:
     id_to_text = {i: text for i, text in enumerate(df['text'])}
     
     # Create the data directory if it doesn't exist
-    os.makedirs('/app/data', exist_ok=True)
+    os.makedirs('/data', exist_ok=True)
 
     # Save FAISS index and id_to_text mapping
-    faiss.write_index(index, '/app/data/faiss_index.index')
-    with open('/app/data/id_to_text.pkl', 'wb') as f:
+    faiss.write_index(index, 'data/faiss_index.index')
+    with open('data/id_to_text.pkl', 'wb') as f:
         pickle.dump(id_to_text, f)
 
     print(f"Successfully processed {len(texts)} documents and created FAISS index.")
