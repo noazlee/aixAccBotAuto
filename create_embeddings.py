@@ -8,7 +8,6 @@ from google.cloud import storage
 import openai
 from google.cloud import secretmanager
 
-# Initialize OpenAI client
 # Function to get the secret from Google Cloud Secret Manager
 def get_secret(secret_name):
     client = secretmanager.SecretManagerServiceClient()
