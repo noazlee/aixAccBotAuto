@@ -9,6 +9,7 @@ import requests
 import json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from google.cloud import secretmanager
 from questions import answer_question
 import pickle
 import faiss
@@ -30,10 +31,16 @@ logging.info("Application starting...")
 index = None
 id_to_text = None
 
+# Function to get the secret from Google Cloud Secret Manager
+def get_secret(secret_name):
+    client = secretmanager.SecretManagerServiceClient()
+    name = f"projects/YOUR_PROJECT_ID/secrets/{secret_name}/versions/latest"
+    response = client.access_secret_version(request={"name": name})
+    return response.payload.data.decode("UTF-8")
+
 # Load OpenAI API key
 try:
-    with open('/workspace/openai_key.txt', 'r') as f:
-        os.environ['OPENAI_API_KEY'] = f.read().strip()
+    os.environ['OPENAI_API_KEY'] = get_secret('openai_api_key')
     openai.api_key = os.environ['OPENAI_API_KEY']
     logging.info("OpenAI API key loaded successfully")
 except Exception as e:
@@ -76,23 +83,6 @@ def get_answer(question):
     return answer_question(question=question, debug=True)
 
 def is_related_to_aix(message):
-    # keywords = [
-    #     "AIX Academy", "AIX", "AI Academy", "Artificial Intelligence", "Machine Learning",
-    #     "Course", "Training", "Certification", "Education", "Programs",
-    #     "beginner course", "intermediate course", "advanced course", "track",
-    #     "curriculum", "syllabus", "material", "Learning path", "Online course",
-    #     "Course modules", "Neural networks", "Deep learning", "Natural language processing",
-    #     "Computer vision", "Data science", "algorithms", "Model training", "AI frameworks",
-    #     "TensorFlow", "PyTorch", "Keras", "Jupyter Notebook", "Google Colab",
-    #     "job", "career", "industry", "AI applications", "AI in business",
-    #     "AI trends", "AI future", "AIX Academy team", "AIX Academy instructors",
-    #     "AIX Academy partners", "AIX Academy community", "projects", "research",
-    #     "case studies", "resources", "tutorials", "workshops", "webinars",
-    #     "events"
-    # ]
-    # for keyword in keywords:
-    #     if keyword.lower() in message.lower():
-    #         return True
     return True
 
 @app.route('/', methods=['GET'])

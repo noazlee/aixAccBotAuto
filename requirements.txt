@@ -20,3 +20,4 @@ beautifulsoup4
 google-cloud-storage
 google-auth
 webdriver-manager
+google-cloud-secret-manager

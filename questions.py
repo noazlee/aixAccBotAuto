@@ -8,7 +8,7 @@ import os
 import faiss
 import pickle
 import tiktoken
-
+from google.cloud import secretmanager
 
 # Get id_to_text and index
 index = faiss.read_index('/app/data/faiss_index.index')
@@ -16,9 +16,19 @@ with open('/app/data/id_to_text.pkl', 'rb') as f:
     id_to_text = pickle.load(f)
 
 tokenizer = tiktoken.get_encoding("cl100k_base")
-with open('/workspace/openai_key.txt', 'r') as f:
-    os.environ['OPENAI_API_KEY'] = f.read().strip()
-openai.api_key = os.environ['OPENAI_API_KEY']
+# Function to get the secret from Google Cloud Secret Manager
+def get_secret(secret_name):
+    client = secretmanager.SecretManagerServiceClient()
+    name = f"projects/aix-academy-chatbot/secrets/{secret_name}/versions/latest"
+    response = client.access_secret_version(request={"name": name})
+    return response.payload.data.decode("UTF-8")
+
+# Load OpenAI API key
+try:
+    os.environ['OPENAI_API_KEY'] = get_secret('openai_api_key')
+    openai.api_key = os.environ['OPENAI_API_KEY']
+except Exception as e:
+    raise
 
 def distances_from_embeddings(
     query_embedding: List[float],

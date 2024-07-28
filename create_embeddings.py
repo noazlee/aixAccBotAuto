@@ -6,11 +6,24 @@ import faiss
 import numpy as np
 import pickle
 from google.cloud import storage
+import openai
+from google.cloud import secretmanager
 
 # Initialize OpenAI client
-with open('/workspace/openai_key.txt', 'r') as f:
-    os.environ['OPENAI_API_KEY'] = f.read().strip()
-openai_client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
+# Function to get the secret from Google Cloud Secret Manager
+def get_secret(secret_name):
+    client = secretmanager.SecretManagerServiceClient()
+    name = f"projects/aix-academy-chatbot/secrets/{secret_name}/versions/latest"
+    response = client.access_secret_version(request={"name": name})
+    return response.payload.data.decode("UTF-8")
+
+# Load OpenAI API key
+try:
+    os.environ['OPENAI_API_KEY'] = get_secret('openai_api_key')
+    openai.api_key = os.environ['OPENAI_API_KEY']
+except Exception as e:
+    raise
+
 
 # Initialize Google Cloud Storage client
 storage_client = storage.Client()
