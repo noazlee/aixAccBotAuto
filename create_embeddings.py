@@ -5,7 +5,7 @@ import faiss
 import numpy as np
 import pickle
 from google.cloud import storage
-import openai
+from openai import OpenAI
 from google.cloud import secretmanager
 
 # Function to get the secret from Google Cloud Secret Manager
@@ -18,7 +18,7 @@ def get_secret(secret_name):
 # Load OpenAI API key
 try:
     os.environ['OPENAI_API_KEY'] = get_secret('openai_api_key')
-    openai.api_key = os.environ['OPENAI_API_KEY']
+    client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
 except Exception as e:
     raise
 
@@ -32,7 +32,6 @@ def remove_newlines(text):
 
 # Load the cl100k_base tokenizer which is designed to work with the ada-002 model 
 tokenizer = tiktoken.get_encoding("cl100k_base")
-
 try:
     # Create a list to store the text files 
     texts = []
@@ -84,9 +83,15 @@ try:
     df = pd.DataFrame(shortened, columns=['text']) 
     df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
 
-    # Create embeddings
-    df['embeddings'] = df.text.apply(lambda x: openai.Embedding.create(
-        input=[x], model='text-embedding-ada-002')['data'][0]['embedding'])
+     # Create embeddings
+    def get_embedding(text):
+        response = client.embeddings.create(
+            model="text-embedding-ada-002",
+            input=[text]
+        )
+        return response.data[0].embedding
+
+    df['embeddings'] = df.text.apply(get_embedding)
 
     # Put into FAISS
     vectors = np.vstack(df['embeddings'].values).astype(np.float32)
@@ -107,7 +112,6 @@ try:
     faiss.write_index(index, '/app/data/faiss_index.index')
     with open('/app/data/id_to_text.pkl', 'wb') as f:
         pickle.dump(id_to_text, f)
-
     print(f"Successfully processed {len(texts)} documents and created FAISS index.")
 
 except Exception as e:
