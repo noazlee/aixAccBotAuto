@@ -42,8 +42,8 @@ except Exception as e:
 
 # Load FAISS index and id_to_text
 try:
-    index = faiss.read_index('app/data/faiss_index.index')
-    with open('app/data/id_to_text.pkl', 'rb') as f:
+    index = faiss.read_index('/app/data/faiss_index.index')
+    with open('/app/data/id_to_text.pkl', 'rb') as f:
         id_to_text = pickle.load(f)
     logging.info("FAISS index and id_to_text loaded successfully")
 except Exception as e:
