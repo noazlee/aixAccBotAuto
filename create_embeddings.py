@@ -95,7 +95,7 @@ try:
 
     # Save FAISS index and id_to_text mapping
     faiss.write_index(index, '/app/data/faiss_index.index')
-    with open('/appdata/id_to_text.pkl', 'wb') as f:
+    with open('/app/data/id_to_text.pkl', 'wb') as f:
         pickle.dump(id_to_text, f)
 
     print(f"Successfully processed {len(texts)} documents and created FAISS index.")
