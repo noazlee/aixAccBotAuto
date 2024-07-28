@@ -71,7 +71,7 @@ examples = [
 
 messages = [{
     "role":"system",
-    "content":"You are a helpful assistant that answers questions - especially about AIX academy and AI in general. Follow the examples provided and give appropriate responses."
+    "content":"You are a helpful assistant that answers questions - especially about AIX academy and AI in general. Follow the examples provided and give appropriate responses. Try to limit responses to 80 words."
 }]
 messages.extend(examples)
 
