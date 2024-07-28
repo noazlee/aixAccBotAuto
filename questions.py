@@ -25,9 +25,10 @@ def get_secret(secret_name):
 
 # Load OpenAI API key
 try:
-    os.environ['OPENAI_API_KEY'] = get_secret('openai_api_key')
-    openai.api_key = os.environ['OPENAI_API_KEY']
+    openai_api_key = get_secret('openai_api_key')
+    client = OpenAI(api_key=openai_api_key)
 except Exception as e:
+    print(f"Error accessing secret: {str(e)}")
     raise
 
 def distances_from_embeddings(

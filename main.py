@@ -34,17 +34,16 @@ id_to_text = None
 # Function to get the secret from Google Cloud Secret Manager
 def get_secret(secret_name):
     client = secretmanager.SecretManagerServiceClient()
-    name = f"projects/YOUR_PROJECT_ID/secrets/{secret_name}/versions/latest"
+    name = f"projects/aix-academy-chatbot/secrets/{secret_name}/versions/latest"
     response = client.access_secret_version(request={"name": name})
     return response.payload.data.decode("UTF-8")
 
 # Load OpenAI API key
 try:
-    os.environ['OPENAI_API_KEY'] = get_secret('openai_api_key')
-    openai.api_key = os.environ['OPENAI_API_KEY']
-    logging.info("OpenAI API key loaded successfully")
+    openai_api_key = get_secret('openai_api_key')
+    client = OpenAI(api_key=openai_api_key)
 except Exception as e:
-    logging.error(f"Failed to load OpenAI API key: {str(e)}")
+    print(f"Error accessing secret: {str(e)}")
     raise
 
 # Load FAISS index and id_to_text

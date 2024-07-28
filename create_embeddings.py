@@ -8,7 +8,6 @@ from google.cloud import storage
 from openai import OpenAI
 from google.cloud import secretmanager
 
-# Function to get the secret from Google Cloud Secret Manager
 def get_secret(secret_name):
     client = secretmanager.SecretManagerServiceClient()
     name = f"projects/aix-academy-chatbot/secrets/{secret_name}/versions/latest"
@@ -17,9 +16,10 @@ def get_secret(secret_name):
 
 # Load OpenAI API key
 try:
-    os.environ['OPENAI_API_KEY'] = get_secret('openai_api_key')
-    client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
+    openai_api_key = get_secret('openai_api_key')
+    client = OpenAI(api_key=openai_api_key)
 except Exception as e:
+    print(f"Error accessing secret: {str(e)}")
     raise
 
 # Initialize Google Cloud Storage client
