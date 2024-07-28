@@ -3,6 +3,7 @@ import logging
 import pandas as pd
 import numpy as np
 import openai
+from openai import OpenAI
 import asyncio
 import nest_asyncio
 import requests
