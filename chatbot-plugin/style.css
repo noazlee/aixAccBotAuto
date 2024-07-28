@@ -1,0 +1,234 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#chatbot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#chatbot-button {
+    width: 60px;
+    height: 60px;
+    background-color: #1CA5AE;
+    color: white;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#chat-container {
+    width: 400px;
+    max-width: 100%;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    flex-direction: column;
+    display: none;
+    position: relative;
+}
+
+#profile-window {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #1CA5AE;
+    border-bottom: 1px solid #ccc;
+}
+
+#profile-picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#bot-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+#chat-window {
+    height: 400px;
+    padding: 20px;
+    overflow-y: scroll;
+    border-bottom: 1px solid #ddd;
+    overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-anchor: auto !important; 
+}
+
+#output {
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-window #output .message {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    transform: translateZ(0);
+}
+
+.message.user .message-content {
+    background-color: #1CA5AE;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 10px;
+    line-height: 1.5em;
+    font-size: 16px;
+}
+
+.message.bot .message-content {
+    background-color: #f1f1f1;
+    color: black;
+    border-radius: 10px;
+    padding: 10px;
+    margin-right: 10px;
+    line-height: 1.5em;
+    font-size: 16px;
+}
+
+.message.typing .message-content {
+    background-color: #f1f1f1;
+    color: black;
+    border-radius: 10px;
+    padding: 10px;
+    margin-right: 10px;
+    font-style: italic;
+    font-weight: bold;
+    position: relative;
+    line-height: 1.5em;
+    font-size: 16px;
+}
+
+.typing-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #ccc;
+    border-radius: 50%;
+    animation: blink 1s infinite;
+    margin-left: 3px;
+}
+
+.typing-indicator:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+#message-window {
+    display: flex;
+}
+
+#user-input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: none;
+    border-top: 1px solid #ddd;
+    font-size:16px;
+}
+
+#send-btn {
+    width: 80px;
+    padding: 10px;
+    border: none;
+    background-color: #1CA5AE;
+    color: #fff;
+    cursor: pointer;
+    font-size:15px;
+}
+
+#send-btn:hover {
+    background-color: #0f767e;
+}
+
+#close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#close-btn:hover {
+    color: red;
+}
+
+/* Portrait */
+@media screen and (orientation:portrait) {
+    #chatbot {
+        right: 5px;
+    }
+
+    #chatbot-button {
+        width: 50px;
+        height: 50px;
+    }
+
+    #chat-container {
+        width: 95%;
+        height: 100%;
+        max-height: 700px;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+        float:right;
+    }
+
+    #profile-window {
+        padding: 15px;
+    }
+
+    #profile-picture {
+        width: 40px;
+        height: 40px;
+    }
+
+    #bot-name {
+        font-size: 16px;
+    }
+
+    #chat-window {
+        height: calc(100% - 120px);
+        padding: 15px;
+    }
+
+    #message-window {
+        padding: 10px;
+        border-top: 1px solid #ddd;
+    }
+
+    #user-input {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    #send-btn {
+        width: 70px;
+        font-size: 14px;
+    }
+}
