@@ -25,8 +25,9 @@ COPY . .
 # Ensure the data directory exists
 RUN mkdir -p /app/data
 
-# If your data is not in the root of your project, adjust this path
-COPY data/faiss_index.index /app/data/
+# Copy FAISS index and id_to_text files
+COPY ./data/faiss_index.index /app/data/
+COPY ./data/id_to_text.pkl /app/data/
 
 # Command to run the application
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "main:app"]
