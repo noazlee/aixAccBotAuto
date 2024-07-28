@@ -12,6 +12,7 @@ from flask_cors import CORS
 from questions import answer_question
 import pickle
 import faiss
+import sys
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -20,7 +21,8 @@ CORS(app)
 # Set up logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
+    level=logging.INFO,
+    stream=sys.stdout  # This ensures logs are written to stdout
 )
 logging.info("Application starting...")
 
