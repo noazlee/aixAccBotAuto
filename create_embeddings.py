@@ -8,7 +8,7 @@ import pickle
 from google.cloud import storage
 
 # Initialize OpenAI client
-with open('workspace/openai_key.txt', 'r') as f:
+with open('/workspace/openai_key.txt', 'r') as f:
     os.environ['OPENAI_API_KEY'] = f.read().strip()
 openai_client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
 

@@ -32,7 +32,7 @@ id_to_text = None
 
 # Load OpenAI API key
 try:
-    with open('workspace/openai_key.txt', 'r') as f:
+    with open('/workspace/openai_key.txt', 'r') as f:
         os.environ['OPENAI_API_KEY'] = f.read().strip()
     openai.api_key = os.environ['OPENAI_API_KEY']
     logging.info("OpenAI API key loaded successfully")
