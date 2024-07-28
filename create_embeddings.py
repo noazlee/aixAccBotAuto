@@ -13,7 +13,7 @@ from google.cloud import secretmanager
 # Function to get the secret from Google Cloud Secret Manager
 def get_secret(secret_name):
     client = secretmanager.SecretManagerServiceClient()
-    name = f"projects/aix-academy-chatbot/secrets/{secret_name}/versions/latest"
+    name = f"projects/YOUR_PROJECT_ID/secrets/{secret_name}/versions/latest"
     response = client.access_secret_version(request={"name": name})
     return response.payload.data.decode("UTF-8")
 
@@ -23,7 +23,6 @@ try:
     openai.api_key = os.environ['OPENAI_API_KEY']
 except Exception as e:
     raise
-
 
 # Initialize Google Cloud Storage client
 storage_client = storage.Client()
@@ -88,7 +87,7 @@ try:
     df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
 
     # Create embeddings
-    df['embeddings'] = df.text.apply(lambda x: openai_client.embeddings.create(
+    df['embeddings'] = df.text.apply(lambda x: openai.Embedding.create(
         input=x, model='text-embedding-ada-002').data[0].embedding)
 
     # Put into FAISS
