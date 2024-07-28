@@ -1,0 +1,7 @@
+# Ignore the following files and directories
+.git
+.env
+*.pyc
+__pycache__
+!data/faiss_index.index
+!data/id_to_text.pkl
