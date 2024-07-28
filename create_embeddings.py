@@ -1,6 +1,5 @@
 import os
 import tiktoken
-from openai import OpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import faiss
 import numpy as np
@@ -88,7 +87,7 @@ try:
 
     # Create embeddings
     df['embeddings'] = df.text.apply(lambda x: openai.Embedding.create(
-        input=x, model='text-embedding-ada-002').data[0].embedding)
+        input=[x], model='text-embedding-ada-002')['data'][0]['embedding'])
 
     # Put into FAISS
     vectors = np.vstack(df['embeddings'].values).astype(np.float32)
