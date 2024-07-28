@@ -25,9 +25,18 @@ COPY . .
 # Ensure the data directory exists
 RUN mkdir -p /app/data
 
+# Debug: List contents of the current directory
+RUN pwd && ls -la
+
+# Debug: List contents of the data directory
+RUN ls -la data
+
 # Copy FAISS index and id_to_text files
 COPY ./data/faiss_index.index /app/data/
 COPY ./data/id_to_text.pkl /app/data/
+
+# Verify files are copied
+RUN ls -la /app/data
 
 # Command to run the application
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "main:app"]
