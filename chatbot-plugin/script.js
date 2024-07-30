@@ -1,22 +1,58 @@
 document.addEventListener('DOMContentLoaded', function () {
     const chatbotButton = document.getElementById('chatbot-button');
+    
+    if (!chatbotButton) {
+        console.error('Chatbot button is missing in the DOM.');
+        return;
+    }
+
+    // Only initialize chat when button is clicked
+    chatbotButton.addEventListener('click', initializeChat);
+});
+
+function initializeChat() {
     const chatContainer = document.getElementById('chat-container');
     const sendBtn = document.getElementById('send-btn');
     const closeBtn = document.getElementById('close-btn');
     const userInput = document.getElementById('user-input');
     const output = document.getElementById('output');
 
-    if (!chatbotButton || !chatContainer || !sendBtn || !closeBtn || !userInput || !output) {
-        console.error('One or more elements are missing in the DOM.');
+    if (!chatContainer || !sendBtn || !closeBtn || !userInput || !output) {
+        console.error('One or more chat elements are missing in the DOM.');
         return;
     }
+
+    // Show chat container immediately
+    chatContainer.style.display = 'flex';
+    document.getElementById('chatbot-button').style.display = 'none';
+
+    // Load chat history and send greeting asynchronously
+    setTimeout(() => {
+        loadChatHistory();
+        if (!isGreetingSent()) {
+            sendGreeting();
+            setGreetingSent();
+        }
+    }, 0);
+
+    closeBtn.addEventListener('click', function () {
+        chatContainer.style.display = 'none';
+        document.getElementById('chatbot-button').style.display = 'flex';
+    });
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
 
     // Load chat history from local storage
     function loadChatHistory() {
         const chatHistory = localStorage.getItem('chatHistory');
         if (chatHistory) {
             output.innerHTML = chatHistory;
-            scrollToBottom()
+            scrollToBottom();
         }
     }
 
@@ -35,29 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.setItem('chatHistory', output.innerHTML);
     }
 
-    chatbotButton.addEventListener('click', function () {
-        chatContainer.style.display = 'flex';
-        chatbotButton.style.display = 'none';
-        console.log('Chatbot button clicked, sending greeting...');
-        if (!isGreetingSent()) {
-            console.log('Sending greeting...');
-            sendGreeting();
-            setGreetingSent();
-        }
-    });
-
-    closeBtn.addEventListener('click', function () {
-        chatContainer.style.display = 'none';
-        chatbotButton.style.display = 'flex';
-    });
-
-    sendBtn.addEventListener('click', sendMessage);
-    userInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
-
     async function sendGreeting() {
         try {
             const response = await fetch(chatbot_plugin_vars.api_url, {
@@ -71,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
             }
-            console.log('Chatbot button clicked, sending greeting...');
+            console.log('Sending greeting...');
             const data = await response.json();
             const botMessage = data.response;
             appendMessage('bot', botMessage);
@@ -88,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
         userInput.value = '';
 
         const typingIndicator = appendTypingIndicator();
-        output.scrollTop = output.scrollHeight;
+        scrollToBottom();
 
         try {
             const response = await fetch(chatbot_plugin_vars.api_url, {
@@ -125,8 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         messageElement.appendChild(messageContent);
         output.appendChild(messageElement);
-        output.scrollTop = output.scrollHeight;
-        scrollToBottom()
+        scrollToBottom();
         saveChatHistory();
     }
 
@@ -153,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         messageElement.appendChild(messageContent);
         output.appendChild(messageElement);
-        output.scrollTop = output.scrollHeight;
+        scrollToBottom();
         
         return messageElement;
     }
@@ -165,6 +177,4 @@ document.addEventListener('DOMContentLoaded', function () {
     function scrollToBottom() {
         output.scrollTop = output.scrollHeight;
     }
-
-    loadChatHistory();
-});
+}
