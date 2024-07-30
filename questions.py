@@ -26,8 +26,8 @@ def get_secret(secret_name):
 # Load OpenAI API key
 try:
     openai_api_key = get_secret('openai_api_key')
-    os.environ['OPENAI_API_KEY'] = openai_api_key  # Set the environment variable
-    client = OpenAI()  # This will now use the environment variable
+    os.environ['OPENAI_API_KEY'] = openai_api_key 
+    client = OpenAI()  
 except Exception as e:
     print(f"Error accessing secret: {str(e)}")
     raise

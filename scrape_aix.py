@@ -16,7 +16,7 @@ chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 
 # Set the path to the ChromeDriver executable
-chrome_driver_path = '/usr/local/bin/chromedriver'  # Update this path as necessary for your environment
+chrome_driver_path = '/usr/local/bin/chromedriver'  
 
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service, options=chrome_options)
@@ -51,13 +51,13 @@ while urls_to_scrape:
 
 # Initialize Google Cloud Storage client
 storage_client = storage.Client()
-bucket_name = 'aix-academy-chatbot-bucket'  # Replace with your bucket name
+bucket_name = 'aix-academy-chatbot-bucket' 
 bucket = storage_client.bucket(bucket_name)
 
 # Function to save page content to a Cloud Storage bucket
 def save_page_content(url):
     driver.get(url)
-    time.sleep(2)  # Wait for the page to load
+    time.sleep(2)  
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     text_content = soup.get_text(separator='\n', strip=True)
     file_name = url.replace(base_url, '').replace('/', '_') + '.txt'
@@ -68,5 +68,4 @@ def save_page_content(url):
 for url in visited_urls:
     save_page_content(url)
 
-# Close the WebDriver
 driver.quit()

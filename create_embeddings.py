@@ -17,15 +17,15 @@ def get_secret(secret_name):
 # Load OpenAI API key
 try:
     openai_api_key = get_secret('openai_api_key')
-    os.environ['OPENAI_API_KEY'] = openai_api_key  # Set the environment variable
-    client = OpenAI()  # This will now use the environment variable
+    os.environ['OPENAI_API_KEY'] = openai_api_key  
+    client = OpenAI()  
 except Exception as e:
     print(f"Error accessing secret: {str(e)}")
     raise
 
 # Initialize Google Cloud Storage client
 storage_client = storage.Client()
-bucket_name = 'aix-academy-chatbot-bucket'  # Replace with your bucket name
+bucket_name = 'aix-academy-chatbot-bucket' 
 bucket = storage_client.bucket(bucket_name)
 
 def remove_newlines(text): 
@@ -43,23 +43,20 @@ try:
         if blob.name.endswith('.txt'):
             # Download the content of the blob
             content = blob.download_as_text()
-            # Extract the filename (URL) from the blob name
+            # Extract the filename from the blob name
             filename = blob.name.replace('text/', '').replace('.txt', '').replace('_', '/')
             if 'users/fxa/login' in filename:
                 continue
             texts.append((filename, content))
 
-    # Create a dataframe from the list of texts 
     import pandas as pd
     df = pd.DataFrame(texts, columns=['fname', 'text']) 
 
-    # Set the text column to be the raw text with the newlines removed 
     df['text'] = df.fname + ". " + df['text'].apply(remove_newlines)
 
     # Tokenize the text and save the number of tokens to a new column 
     df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
 
-    # Tokenizing the text
     chunk_size = 700  # Max number of tokens 
 
     text_splitter = RecursiveCharacterTextSplitter(
