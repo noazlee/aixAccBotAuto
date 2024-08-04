@@ -1,13 +1,10 @@
 import os
 import logging
-import pandas as pd
-import numpy as np
 import openai
 from openai import OpenAI
 import asyncio
 import nest_asyncio
 import requests
-import json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from google.cloud import secretmanager
@@ -15,10 +12,30 @@ from questions import answer_question
 import pickle
 import faiss
 import sys
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
+
+def rate_limit_exceeded_handler(e):
+    return jsonify({
+        "error": "Rate limit exceeded",
+        "message": "You have reached the maximum number of requests. Please try again later."
+    }), 429
+
+# Initialize Limiter
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["100 per day", "30 per hour"],
+    storage_uri="memory://",
+)
+limiter.request_filter(lambda: request.method == "OPTIONS")
+
+# Register the custom rate limit exceeded handler
+app.register_error_handler(429, rate_limit_exceeded_handler)
 
 # Set up logging
 logging.basicConfig(
@@ -87,10 +104,12 @@ def is_related_to_aix(message):
     return True
 
 @app.route('/', methods=['GET'])
+@limiter.exempt
 def hello():
     return jsonify({"message":"Hello world!"})
 
 @app.route('/chat', methods=['POST'])
+@limiter.limit("10 per minute")
 def chat():
     try:
         logging.info("Received chat request")

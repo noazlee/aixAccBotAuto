@@ -21,3 +21,4 @@ google-cloud-storage
 google-auth
 webdriver-manager
 google-cloud-secret-manager
+Flask-Limiter

@@ -103,29 +103,33 @@ function initializeChat() {
         const typingIndicator = appendTypingIndicator();
         scrollToBottom();
 
-        try {
-            const response = await fetch(chatbot_plugin_vars.api_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message }),
-            });
+            try {
+                const response = await fetch(chatbot_plugin_vars.api_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message }),
+                });
 
-            if (!response.ok) {
-                throw new Error(`Server error: ${response.status}`);
+                if (!response.ok) {
+                    if (response.status === 429) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message);
+                    }
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const botMessage = data.response;
+                removeTypingIndicator(typingIndicator);
+                appendMessage('bot', botMessage);
+                saveChatHistory();
+            } catch (error) {
+                removeTypingIndicator(typingIndicator);
+                appendMessage('bot', `Error: Unable to reach the server. ${error.message}`);
+                saveChatHistory();
             }
-
-            const data = await response.json();
-            const botMessage = data.response;
-            removeTypingIndicator(typingIndicator);
-            appendMessage('bot', botMessage);
-            saveChatHistory();
-        } catch (error) {
-            removeTypingIndicator(typingIndicator);
-            appendMessage('bot', `Error: Unable to reach the server. ${error.message}`);
-            saveChatHistory();
-        }
     }
 
     function appendMessage(sender, message) {
