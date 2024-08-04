@@ -29,7 +29,7 @@ def rate_limit_exceeded_handler(e):
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["100 per day", "30 per hour"],
+    default_limits=["40 per day", "20 per hour"],
     storage_uri="memory://",
 )
 limiter.request_filter(lambda: request.method == "OPTIONS")
@@ -109,7 +109,7 @@ def hello():
     return jsonify({"message":"Hello world!"})
 
 @app.route('/chat', methods=['POST'])
-@limiter.limit("10 per minute")
+@limiter.limit("8 per minute")
 def chat():
     try:
         logging.info("Received chat request")

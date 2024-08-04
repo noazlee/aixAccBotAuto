@@ -96,40 +96,39 @@ function initializeChat() {
     async function sendMessage() {
         const message = userInput.value.trim();
         if (!message) return;
-
+    
         appendMessage('user', message);
         userInput.value = '';
-
+    
         const typingIndicator = appendTypingIndicator();
         scrollToBottom();
-
-            try {
-                const response = await fetch(chatbot_plugin_vars.api_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ message }),
-                });
-
-                if (!response.ok) {
-                    if (response.status === 429) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message);
-                    }
-                    throw new Error(`Server error: ${response.status}`);
+    
+        try {
+            const response = await fetch(chatbot_plugin_vars.api_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message }),
+            });
+    
+            if (!response.ok) {
+                if (response.status === 429) {
+                    throw new Error("Please do not spam the bot, you have reached a limit for now.");
                 }
-
-                const data = await response.json();
-                const botMessage = data.response;
-                removeTypingIndicator(typingIndicator);
-                appendMessage('bot', botMessage);
-                saveChatHistory();
-            } catch (error) {
-                removeTypingIndicator(typingIndicator);
-                appendMessage('bot', `Error: Unable to reach the server. ${error.message}`);
-                saveChatHistory();
+                throw new Error(`Server error: ${response.status}`);
             }
+    
+            const data = await response.json();
+            const botMessage = data.response;
+            removeTypingIndicator(typingIndicator);
+            appendMessage('bot', botMessage);
+            saveChatHistory();
+        } catch (error) {
+            removeTypingIndicator(typingIndicator);
+            appendMessage('bot', error.message);
+            saveChatHistory();
+        }
     }
 
     function appendMessage(sender, message) {
