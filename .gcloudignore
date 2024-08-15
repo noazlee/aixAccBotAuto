@@ -1,0 +1,10 @@
+# Python pycache:
+__pycache__/
+# Ignored by the build system
+/setup.cfg
+# Ignore local virtual environment
+venv/
+# Ignore any large data files or directories
+data/
+# Ignore any log files
+*.log
