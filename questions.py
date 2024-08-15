@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from openai import OpenAI
 import openai
 from typing import List

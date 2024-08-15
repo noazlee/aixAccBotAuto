@@ -1,10 +1,18 @@
 unstructured
 tiktoken
+pinecone-client
+pypdf
 langchain
+pandas
 numpy
+python-dotenv
+scipy
+asyncio
 Flask
 Flask-Cors
 openai
+requests
+gunicorn
 nest_asyncio
 faiss-cpu
 selenium
@@ -14,5 +22,3 @@ google-auth
 webdriver-manager
 google-cloud-secret-manager
 Flask-Limiter
-pandas
-gunicorn
