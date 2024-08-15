@@ -15,3 +15,4 @@ webdriver-manager
 google-cloud-secret-manager
 Flask-Limiter
 pandas
+gunicorn
