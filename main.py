@@ -107,6 +107,10 @@ messages.extend(examples)
 def is_related_to_aix(message):
     return True
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({"status": "healthy"}), 200
+
 @app.route('/', methods=['GET'])
 @limiter.exempt
 def hello():

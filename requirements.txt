@@ -14,3 +14,4 @@ google-auth
 webdriver-manager
 google-cloud-secret-manager
 Flask-Limiter
+pandas
