@@ -1,17 +1,8 @@
 import os
 import logging
-import openai
-from openai import OpenAI
-import asyncio
-import nest_asyncio
-import requests
+import sys
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from google.cloud import secretmanager
-from questions import answer_question
-import pickle
-import faiss
-import sys
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
@@ -19,11 +10,64 @@ from flask_limiter.util import get_remote_address
 app = Flask(__name__)
 CORS(app)
 
-def rate_limit_exceeded_handler(e):
-    return jsonify({
-        "error": "Rate limit exceeded",
-        "message": "You have reached the maximum number of requests. Please try again later."
-    }), 429
+# Set up logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO,
+    stream=sys.stdout
+)
+logging.info("Application starting...")
+
+# Global variables for lazy loading
+openai_client = None
+secret_manager_client = None
+faiss_index = None
+id_to_text = None
+answer_question_func = None
+
+def get_openai_client():
+    global openai_client
+    if openai_client is None:
+        from openai import OpenAI
+        openai_api_key = get_secret('openai_api_key')
+        os.environ['OPENAI_API_KEY'] = openai_api_key
+        openai_client = OpenAI()
+    return openai_client
+
+def get_secret_manager_client():
+    global secret_manager_client
+    if secret_manager_client is None:
+        from google.cloud import secretmanager
+        secret_manager_client = secretmanager.SecretManagerServiceClient()
+    return secret_manager_client
+
+def get_secret(secret_name):
+    client = get_secret_manager_client()
+    name = f"projects/aix-academy-chatbot/secrets/{secret_name}/versions/latest"
+    response = client.access_secret_version(request={"name": name})
+    return response.payload.data.decode("UTF-8")
+
+def load_faiss_index():
+    global faiss_index, id_to_text
+    if faiss_index is None:
+        import faiss
+        import pickle
+        try:
+            faiss_index = faiss.read_index('/app/data/faiss_index.index')
+            with open('/app/data/id_to_text.pkl', 'rb') as f:
+                id_to_text = pickle.load(f)
+            logging.info("FAISS index and id_to_text loaded successfully")
+        except Exception as e:
+            logging.error(f"Failed to load FAISS index or id_to_text: {str(e)}")
+            raise
+    return faiss_index, id_to_text
+
+def get_answer_question_func():
+    global answer_question_func
+    if answer_question_func is None:
+        from questions import answer_question
+        answer_question_func = answer_question
+    return answer_question_func
 
 # Initialize Limiter
 limiter = Limiter(
@@ -34,46 +78,14 @@ limiter = Limiter(
 )
 limiter.request_filter(lambda: request.method == "OPTIONS")
 
+def rate_limit_exceeded_handler(e):
+    return jsonify({
+        "error": "Rate limit exceeded",
+        "message": "You have reached the maximum number of requests. Please try again later."
+    }), 429
+
 # Register the custom rate limit exceeded handler
 app.register_error_handler(429, rate_limit_exceeded_handler)
-
-# Set up logging
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO,
-    stream=sys.stdout
-)
-logging.info("Application starting...")
-
-# Global variables
-index = None
-id_to_text = None
-
-# Function to get the secret from Google Cloud Secret Manager
-def get_secret(secret_name):
-    client = secretmanager.SecretManagerServiceClient()
-    name = f"projects/aix-academy-chatbot/secrets/{secret_name}/versions/latest"
-    response = client.access_secret_version(request={"name": name})
-    return response.payload.data.decode("UTF-8")
-
-# Load OpenAI API key
-try:
-    openai_api_key = get_secret('openai_api_key')
-    os.environ['OPENAI_API_KEY'] = openai_api_key 
-    client = OpenAI()  
-except Exception as e:
-    print(f"Error accessing secret: {str(e)}")
-    raise
-
-# Load FAISS index and id_to_text
-try:
-    index = faiss.read_index('/app/data/faiss_index.index')
-    with open('/app/data/id_to_text.pkl', 'rb') as f:
-        id_to_text = pickle.load(f)
-    logging.info("FAISS index and id_to_text loaded successfully")
-except Exception as e:
-    logging.error(f"Failed to load FAISS index or id_to_text: {str(e)}")
-    raise
 
 examples = [
     {"role": "user", "content": "What is AIX?"},
@@ -91,14 +103,6 @@ messages = [{
     "content":"You are a helpful assistant that answers questions - especially about AIX academy and AI in general. Follow the examples provided and give appropriate responses. Try to limit responses to 80 words."
 }]
 messages.extend(examples)
-
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - $(levelname)s - %(message)s',
-    level=logging.INFO
-)
-
-def get_answer(question):
-    return answer_question(question=question, debug=True)
 
 def is_related_to_aix(message):
     return True
@@ -126,7 +130,8 @@ def chat():
         
         if is_related_to_aix(incoming_msg):
             logging.info("Message is related to AIX, generating answer")
-            retrieval_answer = get_answer(incoming_msg)
+            answer_question = get_answer_question_func()
+            retrieval_answer = answer_question(incoming_msg)
             logging.info(f"Retrieved answer: {retrieval_answer}")
             
             current_messages = messages.copy()
@@ -135,6 +140,7 @@ def chat():
             
             logging.info("Sending request to OpenAI")
             try:
+                client = get_openai_client()
                 initial_response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=current_messages
@@ -145,12 +151,9 @@ def chat():
                 logging.info(f"OpenAI response: {initial_response_message}")
                 
                 return jsonify({"response": initial_response_message}), 200
-            except openai.APIError as e:
+            except Exception as e:
                 logging.error(f"OpenAI API error: {str(e)}")
                 return jsonify({"error": "Error communicating with AI service"}), 503
-            except Exception as e:
-                logging.error(f"Unexpected error in OpenAI request: {str(e)}")
-                return jsonify({"error": "An unexpected error occurred"}), 500
         else:
             logging.warning("Message not related to AIX")
             return jsonify({"error": "Message not related to AIX"}), 400
@@ -158,7 +161,9 @@ def chat():
     except Exception as e:
         logging.error(f"An error occurred in chat function: {str(e)}")
         return jsonify({"error": "An internal server error occurred"}), 500
+
 if __name__ == '__main__':
+    import nest_asyncio
     nest_asyncio.apply()
     port = int(os.environ.get('PORT', 8080))
     logging.info(f"Starting Flask app on port {port}")
