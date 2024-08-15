@@ -5,6 +5,11 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from openai import OpenAI
+from google.cloud import secretmanager
+import faiss
+import pickle
+from questions import answer_question
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -18,56 +23,27 @@ logging.basicConfig(
 )
 logging.info("Application starting...")
 
-# Global variables for lazy loading
-openai_client = None
-secret_manager_client = None
-faiss_index = None
-id_to_text = None
-answer_question_func = None
-
-def get_openai_client():
-    global openai_client
-    if openai_client is None:
-        from openai import OpenAI
-        openai_api_key = get_secret('openai_api_key')
-        os.environ['OPENAI_API_KEY'] = openai_api_key
-        openai_client = OpenAI()
-    return openai_client
-
-def get_secret_manager_client():
-    global secret_manager_client
-    if secret_manager_client is None:
-        from google.cloud import secretmanager
-        secret_manager_client = secretmanager.SecretManagerServiceClient()
-    return secret_manager_client
-
+# Initialize components
 def get_secret(secret_name):
-    client = get_secret_manager_client()
+    client = secretmanager.SecretManagerServiceClient()
     name = f"projects/aix-academy-chatbot/secrets/{secret_name}/versions/latest"
     response = client.access_secret_version(request={"name": name})
     return response.payload.data.decode("UTF-8")
 
-def load_faiss_index():
-    global faiss_index, id_to_text
-    if faiss_index is None:
-        import faiss
-        import pickle
-        try:
-            faiss_index = faiss.read_index('/app/data/faiss_index.index')
-            with open('/app/data/id_to_text.pkl', 'rb') as f:
-                id_to_text = pickle.load(f)
-            logging.info("FAISS index and id_to_text loaded successfully")
-        except Exception as e:
-            logging.error(f"Failed to load FAISS index or id_to_text: {str(e)}")
-            raise
-    return faiss_index, id_to_text
+# Initialize OpenAI client
+openai_api_key = get_secret('openai_api_key')
+os.environ['OPENAI_API_KEY'] = openai_api_key
+openai_client = OpenAI()
 
-def get_answer_question_func():
-    global answer_question_func
-    if answer_question_func is None:
-        from questions import answer_question
-        answer_question_func = answer_question
-    return answer_question_func
+# Load FAISS index and id_to_text
+try:
+    faiss_index = faiss.read_index('/app/data/faiss_index.index')
+    with open('/app/data/id_to_text.pkl', 'rb') as f:
+        id_to_text = pickle.load(f)
+    logging.info("FAISS index and id_to_text loaded successfully")
+except Exception as e:
+    logging.error(f"Failed to load FAISS index or id_to_text: {str(e)}")
+    raise
 
 # Initialize Limiter
 limiter = Limiter(
@@ -134,7 +110,6 @@ def chat():
         
         if is_related_to_aix(incoming_msg):
             logging.info("Message is related to AIX, generating answer")
-            answer_question = get_answer_question_func()
             retrieval_answer = answer_question(incoming_msg)
             logging.info(f"Retrieved answer: {retrieval_answer}")
             
@@ -144,8 +119,7 @@ def chat():
             
             logging.info("Sending request to OpenAI")
             try:
-                client = get_openai_client()
-                initial_response = client.chat.completions.create(
+                initial_response = openai_client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=current_messages
                 )
@@ -167,8 +141,6 @@ def chat():
         return jsonify({"error": "An internal server error occurred"}), 500
 
 if __name__ == '__main__':
-    import nest_asyncio
-    nest_asyncio.apply()
     port = int(os.environ.get('PORT', 8080))
     logging.info(f"Starting Flask app on port {port}")
     app.run(host='0.0.0.0', port=port)
